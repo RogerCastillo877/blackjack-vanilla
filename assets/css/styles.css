@@ -1,0 +1,34 @@
+html,
+body {
+  margin: 0px;
+  background-color: #2F4F30;
+  color: white;
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.title {
+  text-align: center;
+  background-color: black;
+  color: white;
+  padding: 2rem;
+  font-size: 2.5rem;
+}
+
+.card {
+  position: relative;
+  width: 15rem;
+  left: 10rem;
+  margin-left: -7.5rem;
+}
+
+#card-pc,
+#card-player {
+  height: 24rem;
+}
