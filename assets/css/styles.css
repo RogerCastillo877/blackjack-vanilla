@@ -21,6 +21,10 @@ body {
   font-size: 2.5rem;
 }
 
+#card-player {
+  display: flex;
+}
+
 .card {
   position: relative;
   width: 15rem;

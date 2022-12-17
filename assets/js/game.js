@@ -15,7 +15,9 @@ let pcPoints = 0;
 const btnRequest = document.querySelector('#btnRequest');
 const btnNew = document.querySelector('#btnNew');
 const btnStop = document.querySelector('#btnStop');
-const htmlPoints = document.querySelectorAll('small')
+const htmlPoints = document.querySelectorAll('small');
+const divPlayerCard = document.querySelector('#card-player');
+const divPcCard = document.querySelector('#card-pc');
 
 const createDeck = () => {
   for( let i = 2; i <= 10; i++ ) {
@@ -59,4 +61,19 @@ btnRequest.addEventListener('click', () => {
   const card = requestCard();
   playerPoints = playerPoints + cardValue( card );
   htmlPoints[0].innerText = playerPoints;
+
+  const newCard = document.createElement('img');
+  newCard.src = `./assets/img/cartas/${card}.png`;
+  newCard.alt = `${card} player card image`;
+  newCard.classList.add('card');
+  divPlayerCard.appendChild(newCard);
+
+  if( playerPoints > 21 ) {
+    console.warn('Lo siento, perdiste :(');
+    alert('Lo siento, perdiste :(');
+    btnRequest.disabled = true;
+  } else if ( playerPoints === 21 ) {
+    console.warn('21, ¡genial!')
+    btnRequest.disabled = true;
+  }
 });
