@@ -57,6 +57,29 @@ const cardValue = ( card ) => {
           : value * 1;
 };
 
+const pcTurn = ( minimumPoints ) => {
+  
+  do {
+    const card = requestCard();
+    
+    pcPoints = pcPoints + cardValue( card );
+    
+    htmlPoints[1].innerText = pcPoints;
+
+    const newCard = document.createElement('img');
+    newCard.src = `./assets/img/cartas/${card}.png`;
+    newCard.alt = `${card} player card image`;
+    newCard.classList.add('card');
+    divPcCard.appendChild(newCard);
+    btnRequest.disabled = true;
+
+    if( minimumPoints > 21 ) {
+      break;
+    }
+
+  } while ( (pcPoints <= minimumPoints) && ( minimumPoints <= 21 ) );
+}
+
 btnRequest.addEventListener('click', () => {
   const card = requestCard();
   playerPoints = playerPoints + cardValue( card );
@@ -68,12 +91,21 @@ btnRequest.addEventListener('click', () => {
   newCard.classList.add('card');
   divPlayerCard.appendChild(newCard);
 
-  if( playerPoints > 21 ) {
+  if( playerPoints >= 21 ) {
     console.warn('Lo siento, perdiste :(');
     alert('Lo siento, perdiste :(');
     btnRequest.disabled = true;
+    btnStop.disabled = true;
+    pcTurn(playerPoints);
   } else if ( playerPoints === 21 ) {
     console.warn('21, ¡genial!')
     btnRequest.disabled = true;
+    btnStop.disabled = true;
+    pcTurn(playerPoints);
   }
+});
+
+btnStop.addEventListener('click', () => {
+  btnStop.disabled = true;
+  pcTurn(playerPoints);
 });
