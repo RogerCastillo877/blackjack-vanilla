@@ -9,6 +9,14 @@ let deck =[];
 const types = [ 'C', 'D', 'H', 'S' ];
 const specials = [ 'A', 'J', 'Q','K' ];
 
+let playerPoints = 0;
+let pcPoints = 0;
+
+const btnRequest = document.querySelector('#btnRequest');
+const btnNew = document.querySelector('#btnNew');
+const btnStop = document.querySelector('#btnStop');
+const htmlPoints = document.querySelectorAll('small')
+
 const createDeck = () => {
   for( let i = 2; i <= 10; i++ ) {
     for ( const type of types ) {
@@ -22,7 +30,6 @@ const createDeck = () => {
   }
 
   deck = _.shuffle( deck );
-  console.log( deck );
   return deck;
 };
 
@@ -48,4 +55,8 @@ const cardValue = ( card ) => {
           : value * 1;
 };
 
-console.log(cardValue('AH'));
+btnRequest.addEventListener('click', () => {
+  const card = requestCard();
+  playerPoints = playerPoints + cardValue( card );
+  htmlPoints[0].innerText = playerPoints;
+});
