@@ -78,6 +78,14 @@ const pcTurn = ( minimumPoints ) => {
     }
 
   } while ( (pcPoints <= minimumPoints) && ( minimumPoints <= 21 ) );
+
+  setTimeout(() => {
+    if(minimumPoints === 21 && pcPoints !== 21 ) return alert('Player Gana');
+    ( pcPoints === minimumPoints ) && alert('Pc Gana');
+    ( minimumPoints > 21 ) && alert('Pc Gana');
+    if ( pcPoints > 21 ) { return alert('Player Gana')};
+    ( minimumPoints > pcPoints && minimumPoints <= 21 ) ? alert('Player Gana') : alert('Pc Gana');
+  }, 100);
 }
 
 btnRequest.addEventListener('click', () => {
@@ -109,3 +117,16 @@ btnStop.addEventListener('click', () => {
   btnStop.disabled = true;
   pcTurn(playerPoints);
 });
+
+btnNew.addEventListener('click', () => {
+  deck = []
+  deck = createDeck();
+  playerPoints = 0;
+  pcPoints = 0;
+  htmlPoints[0].innerText = 0;
+  htmlPoints[1].innerText = 0;
+  btnRequest.disabled = false;
+  btnStop.disabled = false;
+  divPlayerCard.innerHTML = '';
+  divPcCard.innerHTML = '';
+})
