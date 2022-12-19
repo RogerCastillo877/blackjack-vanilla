@@ -1,4 +1,4 @@
-(() => {
+const myModule = (() => {
   'use strict'
 
   let deck =[];
@@ -10,15 +10,21 @@
   const btnRequest = document.querySelector('#btnRequest');
   const btnNew = document.querySelector('#btnNew');
   const btnStop = document.querySelector('#btnStop');
+  
+  const divCardPlayers = document.querySelectorAll('.divCards');
   const htmlPoints = document.querySelectorAll('small');
-  const divPlayerCard = document.querySelector('#card-player');
-  const divPcCard = document.querySelector('#card-pc');
 
   const initDeck = ( numberOfPlayers = 1 ) => {
     deck = createDeck();
-    for( let i = 0; i < numberOfPlayers; i++ ) {
+    playersPoints = [];
+    for( let i = 0; i <= numberOfPlayers; i++ ) {
       playersPoints.push(0);
     }
+    htmlPoints.forEach( (elem) => elem.innerText = 0 );
+    divCardPlayers.forEach( (elem) => elem.innerHTML = '' );
+    
+    btnRequest.disabled = false;
+    btnStop.disabled = false;
   };
 
   const createDeck = () => {
@@ -51,30 +57,23 @@
             : value * 1;
   };
 
-  const acumulatePoints = () => {};
+  const acumulatePoints = ( card, turn ) => {
+    playersPoints[ turn ] = playersPoints[ turn ] + cardValue( card );
+    htmlPoints[ turn ].innerText = playersPoints[ turn ];
+    return playersPoints[ turn ];
+  };
 
-  const pcTurn = ( minimumPoints ) => {
-    
-    do {
-      const card = requestCard();
-      
-      pcPoints = pcPoints + cardValue( card );
-      
-      htmlPoints[1].innerText = pcPoints;
+  const createCard = ( card, turn ) => {
+   
+    const newCardImage = document.createElement('img');
+    newCardImage.src = `./assets/img/cartas/${card}.png`;
+    newCardImage.alt = `${card} player card image`;
+    newCardImage.classList.add('card');
+    divCardPlayers[ turn ].append(newCardImage);
+  }
 
-      const newCard = document.createElement('img');
-      newCard.src = `./assets/img/cartas/${card}.png`;
-      newCard.alt = `${card} player card image`;
-      newCard.classList.add('card');
-      divPcCard.appendChild(newCard);
-      btnRequest.disabled = true;
-
-      if( minimumPoints > 21 ) {
-        break;
-      }
-
-    } while ( (pcPoints <= minimumPoints) && ( minimumPoints <= 21 ) );
-
+  const determinateWinner = () => {
+    const [ minimumPoints, pcPoints ] = playersPoints;
     setTimeout(() => {
       if(minimumPoints === 21 && pcPoints !== 21 ) return alert('Player Gana');
       ( pcPoints === minimumPoints ) && alert('Pc Gana');
@@ -84,16 +83,22 @@
     }, 100);
   }
 
+  const pcTurn = ( minimumPoints ) => {
+    let pcPoints = 0;
+    do {
+      const card = requestCard();
+      pcPoints = acumulatePoints( card, playersPoints.length - 1 );
+      createCard( card, playersPoints.length - 1 )
+
+    } while ( (pcPoints <= minimumPoints) && ( minimumPoints <= 21 ) );
+
+    determinateWinner();
+  }
+
   btnRequest.addEventListener('click', () => {
     const card = requestCard();
-    playerPoints = playerPoints + cardValue( card );
-    htmlPoints[0].innerText = playerPoints;
-
-    const newCard = document.createElement('img');
-    newCard.src = `./assets/img/cartas/${card}.png`;
-    newCard.alt = `${card} player card image`;
-    newCard.classList.add('card');
-    divPlayerCard.appendChild(newCard);
+    const playerPoints = acumulatePoints( card, 0)
+    createCard( card, 0);
 
     if( playerPoints >= 21 ) {
       console.warn('Lo siento, perdiste :(');
@@ -109,24 +114,17 @@
     }
   });
 
-  btnStop.addEventListener('click', () => {
+  btnStop.addEventListener('click', ( turn ) => {
     btnStop.disabled = true;
-    pcTurn(playerPoints);
+    pcTurn(playersPoints[ turn ]);
   });
 
   btnNew.addEventListener('click', () => {
-    console.clear()
+    
     initDeck();
-    // deck = []
-    // deck = createDeck();
-    playerPoints = 0;
-    pcPoints = 0;
-    htmlPoints[0].innerText = 0;
-    htmlPoints[1].innerText = 0;
-    btnRequest.disabled = false;
-    btnStop.disabled = false;
-    divPlayerCard.innerHTML = '';
-    divPcCard.innerHTML = '';
   })
+  return {
+    nuevoJuego: initDeck
+  };
 })()
 
