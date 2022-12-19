@@ -115,8 +115,9 @@ const myModule = (() => {
   });
 
   btnStop.addEventListener('click', ( turn ) => {
+    btnRequest.disabled = true;
     btnStop.disabled = true;
-    pcTurn(playersPoints[ turn ]);
+    pcTurn(playersPoints[0]);
   });
 
   btnNew.addEventListener('click', () => {
