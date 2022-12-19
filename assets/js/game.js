@@ -5,9 +5,8 @@
   const types = [ 'C', 'D', 'H', 'S' ];
   const specials = [ 'A', 'J', 'Q','K' ];
 
-  let playerPoints = 0;
-  let pcPoints = 0;
-
+  let playersPoints = [];
+  
   const btnRequest = document.querySelector('#btnRequest');
   const btnNew = document.querySelector('#btnNew');
   const btnStop = document.querySelector('#btnStop');
@@ -15,7 +14,15 @@
   const divPlayerCard = document.querySelector('#card-player');
   const divPcCard = document.querySelector('#card-pc');
 
+  const initDeck = ( numberOfPlayers = 1 ) => {
+    deck = createDeck();
+    for( let i = 0; i < numberOfPlayers; i++ ) {
+      playersPoints.push(0);
+    }
+  };
+
   const createDeck = () => {
+    deck = [];
     for( let i = 2; i <= 10; i++ ) {
       for ( const type of types ) {
         deck.push( i+type )
@@ -26,24 +33,15 @@
         deck.push( special + type )
       }
     }
-
-    deck = _.shuffle( deck );
-    return deck;
+    return _.shuffle( deck );
   };
-
-  createDeck();
 
   const requestCard = () => {
     if(deck.length === 0) {
       throw new Error('Doesn\'t have more cards')
     };
-
-    const selectedCard = deck.pop();
-
-    return selectedCard;
+    return deck.pop();
   };
-
-  // requestCard();
 
   const cardValue = ( card ) => {
     const value = card.substring(0, card.length -1);
@@ -52,6 +50,8 @@
             ( value=== 'A') ? 11 : 10
             : value * 1;
   };
+
+  const acumulatePoints = () => {};
 
   const pcTurn = ( minimumPoints ) => {
     
@@ -115,8 +115,10 @@
   });
 
   btnNew.addEventListener('click', () => {
-    deck = []
-    deck = createDeck();
+    console.clear()
+    initDeck();
+    // deck = []
+    // deck = createDeck();
     playerPoints = 0;
     pcPoints = 0;
     htmlPoints[0].innerText = 0;
